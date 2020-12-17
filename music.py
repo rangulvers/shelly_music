@@ -3,17 +3,17 @@ import time
 import requests
 
 midifile = mido.MidiFile('beethoven_fur_elise.mid', clip=True)
-
 mod = 5
+midi_port = "Microsoft GS Wavetable Synth 0"
 
 # Shelly not mapping. Make sure to have the same ammount of shellys as you have defined for the modolus 
 # Note Number : Shelly IP : Relay 
 shellyNoteMapping = {
-    60: ["192.168.2.142", "0"], # Haustür
-    61: ["192.168.2.141", "0"], # Garage Einfahrt
-    62: ["192.168.2.138", "0"],  # Erker
-    63: ["192.168.2.167", "1"], # Terrasse
-    64: ["192.168.2.139", "0"] # Küche
+    60: ["192.168.2.142", "0"], 
+    61: ["192.168.2.141", "0"], 
+    62: ["192.168.2.138", "0"], 
+    63: ["192.168.2.167", "1"], 
+    64: ["192.168.2.139", "0"] 
 }
 
 on_off_Mapping = {
@@ -27,7 +27,7 @@ for shelly in shellyNoteMapping:
     r = requests.get(f"http://{shellyNoteMapping[shelly][0]}/relay/{shellyNoteMapping[shelly][1]}?turn=off")
 
 
-with mido.open_output("Microsoft GS Wavetable Synth 0") as output:
+with mido.open_output(midi_port) as output:
     try:
         t0 = time.time()
         for message in midifile.play():

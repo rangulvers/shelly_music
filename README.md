@@ -6,11 +6,15 @@ Everything is based on the [mido](https://mido.readthedocs.io/en/latest/) packag
 
 ## How to use it
 
-You will need to configure three parts 
+You will need to configure four parts 
 
 1. the midi file you want to serve
 2. the IPs of your shelly devices 
 3. The ```mod``` parameter. This should be set to the same number has shellys you want to use. This way each note coming from midi will be converted to match one of the shellys. You will get the best result with more shellys
+4. The port that should be used to play the music
+
+If you don't know what port to use you can run ```mido.get_output_names()``` to list the available ports on your machine. 
+
 
 ## Next Steps
 
