@@ -2,6 +2,8 @@
 
 This project is aimed to provide a little bit of fun to your home automation. If you have a MIDI file laying around you can use it to controll you shelly's around the house to creat a light show. 
 
+Everything is based on the [mido](https://mido.readthedocs.io/en/latest/) package. 
+
 ## How to use it
 
 You will need to configure three parts 
