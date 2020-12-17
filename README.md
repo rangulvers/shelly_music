@@ -19,6 +19,7 @@ If you don't know what port to use you can run ```mido.get_output_names()``` to 
 ## Next Steps
 
 - [ ] Allow for more settings like songs, tempo ...
+- [ ] Use the note play length...somehow
 - [ ] Scan the network for shellys 
 - [ ] Make it into a python lib
 - [ ] Build a home assistant integration
