@@ -12,7 +12,7 @@ You will need to configure three parts
 
 ## Next Steps
 
-- [] Allow for more settings like songs, tempo ...
-- [] Scan the network for shellys 
-- [] Make it into a python lib
-- [] Build a home assistant integration
+- [ ] Allow for more settings like songs, tempo ...
+- [ ] Scan the network for shellys 
+- [ ] Make it into a python lib
+- [ ] Build a home assistant integration
