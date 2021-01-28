@@ -7,7 +7,7 @@ def main():
     mod = 5
     midi_port = "Microsoft GS Wavetable Synth 0"
 
-    # Shelly not mapping. Make sure to have the same ammount of shellys as you have defined for the modolus 
+    # Shelly to note mapping. Make sure to have the same ammount of shellys as you have defined for the modolus (mod)
     # Note Number : Shelly IP : Relay 
     shellyNoteMapping = {
         60: ["192.168.2.142", "0"], 
@@ -32,13 +32,12 @@ def main():
         try:
             t0 = time.time()
             for message in midifile.play():
-                # print(message)
                 output.send(message)
                 if message.type in ["note_on", "note_off"]:
                     note = (message.note%mod) + 60
                     print(f"{note} - {message.type}")
                     print(f"http://{shellyNoteMapping[note][0]}/relay/{shellyNoteMapping[note][1]}?turn={on_off_Mapping[message.type]}")
-                    #r = requests.get(f"http://{shellyNoteMapping[note][0]}/relay/{shellyNoteMapping[note][1]}?turn={on_off_Mapping[message.type]}")
+                    r = requests.get(f"http://{shellyNoteMapping[note][0]}/relay/{shellyNoteMapping[note][1]}?turn={on_off_Mapping[message.type]}")
             print('play time: {:.2f} s (expected {:.2f})'.format(
                 time.time() - t0, midifile.length))
         except KeyboardInterrupt:
