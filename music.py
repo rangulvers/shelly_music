@@ -1,9 +1,12 @@
 import mido
 import time
 import requests
+import argparse
+import glob
+import os
 
-def main():
-    midifile = mido.MidiFile('beethoven_fur_elise.mid', clip=True)
+def main(midiFileName):
+    midifile = mido.MidiFile(f'midifiles/{midiFileName}', clip=True)
     mod = 5
     midi_port = "Microsoft GS Wavetable Synth 0"
 
@@ -13,7 +16,7 @@ def main():
         60: ["192.168.2.142", "0"], 
         61: ["192.168.2.141", "0"], 
         62: ["192.168.2.138", "0"], 
-        63: ["192.168.2.167", "1"], 
+        63: ["192.168.2.167", "1"], # Shelly 2.5 Example
         64: ["192.168.2.139", "0"] 
     }
 
@@ -38,7 +41,7 @@ def main():
                     note = (message.note%mod) + 60
                     print(f"{note} - {message.type}")
                     print(f"http://{shellyNoteMapping[note][0]}/relay/{shellyNoteMapping[note][1]}?turn={on_off_Mapping[message.type]}")
-                    #r = requests.get(f"http://{shellyNoteMapping[note][0]}/relay/{shellyNoteMapping[note][1]}?turn={on_off_Mapping[message.type]}")
+                    r = requests.get(f"http://{shellyNoteMapping[note][0]}/relay/{shellyNoteMapping[note][1]}?turn={on_off_Mapping[message.type]}")
             print('play time: {:.2f} s (expected {:.2f})'.format(
                 time.time() - t0, midifile.length))
         except KeyboardInterrupt:
@@ -46,5 +49,33 @@ def main():
             output.reset()
 
 
+def scanFiles():
+    for file in glob.glob("midifiles/*.mid"):
+        print(os.path.basename(file))
+
+
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+
+    # Add more options if you like
+    parser.add_argument(
+        "--song",
+        dest="midiFileName",
+        help="Midi File",
+        metavar="FILE",
+    )
+    parser.add_argument(
+        "--files",
+        dest="files",
+        action='store_true'
+    )
+
+    args = parser.parse_args()
+
+    if args.files:
+        scanFiles()
+    elif args.midiFileName:
+        main(args.midiFileName)
+    else:
+        print("Please select a file")
+
