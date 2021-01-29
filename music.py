@@ -13,11 +13,11 @@ def main(midiFileName):
     # Shelly to note mapping. Make sure to have the same ammount of shellys as you have defined for the modolus (mod)
     # Note Number : Shelly IP : Relay 
     shellyNoteMapping = {
-        60: ["192.168.2.142", "0"], 
-        61: ["192.168.2.141", "0"], 
-        62: ["192.168.2.138", "0"], 
-        63: ["192.168.2.167", "1"], # Shelly 2.5 Example
-        64: ["192.168.2.139", "0"] 
+        100: ["192.168.2.142", "0", "note_off"], 
+        101: ["192.168.2.141", "0", "note_off"], 
+        102: ["192.168.2.138", "0", "note_off"], 
+        103: ["192.168.2.167", "1", "note_off"], # Shelly 2.5 Example
+        104: ["192.168.2.139", "0", "note_off"],
     }
 
     on_off_Mapping = {
@@ -37,10 +37,13 @@ def main(midiFileName):
             for message in midifile.play():
                 output.send(message)
                 if message.type in ["note_on", "note_off"]:
-                    note = (message.note%mod) + 60
-                    print(f"{note} - {message.type}")
-                    print(f"http://{shellyNoteMapping[note][0]}/relay/{shellyNoteMapping[note][1]}?turn={on_off_Mapping[message.type]}")
-                    r = requests.get(f"http://{shellyNoteMapping[note][0]}/relay/{shellyNoteMapping[note][1]}?turn={on_off_Mapping[message.type]}")
+                    note = (message.note%mod) + 100
+                    
+                    if message.type != shellyNoteMapping[note][2]:
+                        shellyNoteMapping[note][2] = message.type
+                        print(f"{note}  -   {message.type}      http://{shellyNoteMapping[note][0]}/relay/{shellyNoteMapping[note][1]}?turn={on_off_Mapping[message.type]}")
+                        r = requests.get(f"http://{shellyNoteMapping[note][0]}/relay/{shellyNoteMapping[note][1]}?turn={on_off_Mapping[message.type]}")
+            
             print('play time: {:.2f} s (expected {:.2f})'.format(
                 time.time() - t0, midifile.length))
         except KeyboardInterrupt:
@@ -68,7 +71,7 @@ if __name__ == "__main__":
         dest="files",
         action='store_true'
     )
-
+  
     args = parser.parse_args()
 
     if args.files:
@@ -76,5 +79,5 @@ if __name__ == "__main__":
     elif args.midiFileName:
         main(args.midiFileName)
     else:
-        print("Please select a file")
+        parser.print_help()
 
